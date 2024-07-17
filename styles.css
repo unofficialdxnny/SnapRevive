@@ -1,72 +1,59 @@
-/* styles.css */
+html,
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: transparent;
+}
 
-/* Add styles here to customize the appearance of your app */
+.container {
+  position: relative;
+}
 
-body, html {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden; 
+.loading {
+  border-radius: 50px;
+  border: 6px solid gray;
+  border-bottom-color: transparent;
+}
+
+.loading--clockwise {
+  height: 60px;
+  width: 60px;
+  animation-name: spin--clockwise;
+  animation-duration: 840ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.loading--counter-clockwise {
+  height: 30px;
+  width: 30px;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  animation-name: spin--counter-clockwise;
+  animation-duration: 840ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes spin--clockwise {
+  from {
+    transform: rotate(0deg);
   }
-  
-  .center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%; /* Make sure the container takes up the full height of the viewport */
+
+  to {
+    transform: rotate(360deg);
   }
-  
-  .spinner {
-    min-height: 275px;
+}
+
+@keyframes spin--counter-clockwise {
+  from {
+    transform: rotate(0deg);
   }
-  
-  .spinner h3 {
-    position: relative;
+
+  to {
+    transform: rotate(-360deg);
   }
-  
-  .spinner h3:after {
-    content: "";
-    box-sizing: border-box;
-    position: absolute;
-    top: 50%; /* Center vertically within the parent */
-    left: 50%; /* Center horizontally within the parent */
-    width: 40px;
-    height: 40px;
-    margin-top: -20px; /* Half of the height */
-    margin-left: -20px; /* Half of the width */
-    border-radius: 50%;
-    border: 4px solid #b1b1b2;
-    border-top-color: #323e48;
-    -webkit-animation: spinner 1s linear infinite;
-    animation: spinner 1s linear infinite;
-  }
-  
-  @-webkit-keyframes spinner {
-    to {
-      -webkit-transform: rotate(360deg);
-      transform: rotate(360deg);
-    }
-  }
-  
-  @keyframes spinner {
-    to {
-      -webkit-transform: rotate(360deg);
-      transform: rotate(360deg);
-    }
-  }
-  
-  /* from MDN - https://developer.mozilla.org/ */
-  .visually-hidden {
-    clip: rect(1px, 1px, 1px, 1px) !important;
-    border: 0 !important;
-    -webkit-clip-path: inset(50%) !important;
-    clip-path: inset(50%) !important;
-    height: 1px !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    padding: 0 !important;
-    position: absolute !important;
-    white-space: nowrap !important;
-    width: 1px !important;
-  }
-  
+}

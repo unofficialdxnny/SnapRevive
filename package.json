@@ -1,13 +1,13 @@
 {
-  "name": "electron-quick-start",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "name": "snapify",
+  "version": "6.0.0",
+  "description": "Snapify Boost Snapscore",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "package-win": "electron-packager . Snapify --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName='Snapify'"
+    "package": "electron-builder"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/unofficialdxnny/Snapify",
   "keywords": [
     "Electron",
     "quick",
@@ -15,19 +15,47 @@
     "tutorial",
     "demo"
   ],
-  "author": "GitHub",
+  "author": "unofficialdxnny (Danial Ahmed)",
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^26.1.0",
-    "electron-packager": "^17.1.2",
-    "playwright": "1.18"
+    "electron-builder": "^24.13.3"
   },
   "dependencies": {
     "chromedriver": "^116.0.0",
     "codeceptjs": "^3.5.4",
+    "discord-rpc": "^4.0.1",
     "electron-reload": "^2.0.0-alpha.1",
+    "express": "^4.19.2",
     "puppeteer": "^21.1.1",
     "selenium-webdriver": "^4.12.0",
     "webdriverio": "^8.16.4"
+  },
+  "build": {
+    "appId": "com.example.snapify",
+    "productName": "Snapify",
+    "directories": {
+      "output": "release-builds"
+    },
+    "win": {
+      "target": "portable",
+      "icon": "icons/builder-logo.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "icons/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "icons/icon.png"
+    },
+    "files": [
+      "main.js",
+      "renderer.js",
+      "icons/**/*",
+      "node_modules/",
+      "validate.html",
+      "index.html"
+    ]
   }
 }

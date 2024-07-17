@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snapify Home</title>
+    <style>
+        * {
+            font-family: 'Nunito', sans-serif;
+            overflow: hidden;
+        }
+
+        body {
+            background-color: #faebd7;
+            background-image: url(./icon/bgHome.png);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input {
+            max-width: 190px;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            box-shadow: 2px 2px 7px 0 rgba(0, 0, 0, 0.2);
+            outline: none;
+            color: dimgray;
+            margin-bottom: 10px;
+        }
+
+        .input.invalid {
+            animation: justshake 0.3s forwards;
+            color: red;
+        }
+
+        @keyframes justshake {
+            25% {
+                transform: translateX(5px);
+            }
+
+            50% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #7289da;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: rgb(103, 122, 198);
+            transition: 0.15s;
+        }
+
+        button:active {
+            background-color: rgb(91, 111, 174);
+        }
+
+        .discord-logo {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 50px;
+            right: 10px;
+            background-color: #2c2f33;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="input-container">
+        <input type="text" name="text" class="input" placeholder="Enter Discord User ID" id="numberInput">
+        <button id="submitButton">Submit</button>
+    </div>
+
+    <img src="./icon/discord.png" alt="Discord" class="discord-logo" id="discordLogo">
+    <div class="notification" id="notification">Discord server URL copied!</div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        const input = document.getElementById('numberInput');
+        const button = document.getElementById('submitButton');
+        const discordLogo = document.getElementById('discordLogo');
+        const notification = document.getElementById('notification');
+
+        // Function to ensure input only allows numeric characters
+        input.addEventListener('input', (event) => {
+            event.target.value = event.target.value.replace(/[^0-9]/g, '');
+        });
+
+        // Handle button click event
+        button.addEventListener('click', async () => {
+            const userId = input.value;
+
+            // Perform validation on the server side
+            const response = await fetch('http://localhost:3000/checkUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId })
+            });
+
+            const result = await response.json();
+
+            if (result.valid) {
+                console.log('Validation Successful!', result);
+                ipcRenderer.send('submit-user-id', userId); // Send user ID to main process
+            } else {
+                input.classList.add('invalid');
+                console.log('Validation Failed', result);
+                alert('Join the Discord Server and request access');
+                setTimeout(() => {
+                    input.classList.remove('invalid');
+                }, 300);
+            }
+        });
+
+        // Handle Discord logo click event to copy Discord server URL to clipboard
+        discordLogo.addEventListener('click', () => {
+            const discordUrl = 'https://discord.gg/7HnSE6Jsam'; // Replace with your actual Discord server URL
+            navigator.clipboard.writeText(discordUrl).then(() => {
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        });
+    </script>
+</body>
+
+</html>

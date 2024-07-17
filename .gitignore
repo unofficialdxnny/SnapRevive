@@ -1,1 +1,5 @@
-node_modules
+node_modules/
+dist/
+snapify-win32-x64/
+v7.0.0.1/
+release-builds
